@@ -39,19 +39,17 @@ void eqsolve(int n, double (*a)[Z]) {
     }
 }
 
-int S, N, K;
-double p[Z][Z], eqs[Z][Z], mat[Z][Z];
 
-int main() {
-    scanf("%d%d%d", &S, &N, &K);
-    S = abs(S);
-    if(N==1) {
-        printf("%.9f\n", S%K==0 ? (double)(S/K) : 0.0);
-        return 0;
-    }
+double solve(int S, int N, int K) {
+    static double p[Z][Z], eqs[Z][Z], mat[Z][Z];
+    if(N==1) return S%K==0 ? (double)(S/K) : -1.0;
+
+    // calc p
     p[0][0] = 1.0;
     const int M = N*K+1;
     rep(i, K) rep(j, M) rep(k, N) p[i+1][j+k+1] += p[i][j]/N;
+
+    // solve small
     eqs[0][0] = 1;
     for(int k=1; k<M; k++) {
         eqs[k][k] = 1;
@@ -59,17 +57,25 @@ int main() {
         eqs[k][M] = -1;
     }
     eqsolve(M, eqs);
-    if(S<M) printf("%.9f\n", fabs(eqs[S][M]));
-    else {
-        rep(i, M) mat[0][i] = p[K][i+1];
-        mat[0][M] = 1;
-        rep(i, M-1) mat[i+1][i] = 1;
-        mat[M][M] = 1;
-        pow(mat, S-M+1);
-        double ans = 0;
-        rep(i, M) ans += mat[0][i]*fabs(eqs[M-1-i][M]);
-        ans += mat[0][M];
-        printf("%.9f\n", ans);
-    }
+    if(S<M) return fabs(eqs[S][M]);
+
+    // solve large
+    rep(i, M) mat[0][i] = p[K][i+1];
+    mat[0][M] = 1;
+    rep(i, M-1) mat[i+1][i] = 1;
+    mat[M][M] = 1;
+    pow(mat, S-M+1);
+    double ans = 0;
+    rep(i, M) ans += mat[0][i]*fabs(eqs[M-1-i][M]);
+    ans += mat[0][M];
+    return ans;
+}
+
+int main() {
+    int S, N, K;
+    scanf("%d%d%d", &S, &N, &K);
+    double ans = solve(abs(S), N, K);
+    if(ans<0) printf("%d\n", -1);
+    else printf("%.9f\n", ans);
     return 0;
 }
