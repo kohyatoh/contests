@@ -28,8 +28,8 @@ inline double intersectSP(const P& s0, const P& s1, const P& p) {
 }
 
 P projection(const P& l0, const P& l1, const P& p) {
-    const double t = dot(p-l0, l0-l1) / norm(l0-l1);
-    return l0 + t*(l0-l1);
+    const double t = dot(p-l0, l1-l0) / norm(l1-l0);
+    return l0 + t*(l1-l0);
 }
 
 double distanceSP(const P& s0, const P& s1, const P& p) {
@@ -39,14 +39,15 @@ double distanceSP(const P& s0, const P& s1, const P& p) {
 }
 
 bool intersectSS(const P & s0, const P& s1, const P& t0, const P& t1) {
-    return ccw(s0, s1, t0)*ccw(s0, s1, t1) <= 0
-        && ccw(t0, t1, s0)*ccw(t0, t1, s1) <= 0;
+    return ccw(s0, s1, t0) * ccw(s0, s1, t1) <= 0
+        && ccw(t0, t1, s0) * ccw(t0, t1, s1) <= 0;
 }
 
 P crosspoint(const P& l0, const P& l1, const P& m0, const P& m1) {
     const double A = cross(l1-l0, m1-m0);
     const double B = cross(l1-l0, l1-m0);
     if(abs(A)<EPS && abs(B)<EPS) return m0;
+    // if(abs(A)<EPS) assert(false);
     return m0+B/A*(m1-m0);
 }
 
@@ -59,13 +60,9 @@ double distanceSS(const P& s0, const P& s1, const P& t0, const P& t1) {
 vector<P> crosspointsCL(const P& p, double r, const P& l0, const P& l1) {
     vector<P> v;
     const P cp(crosspoint(p, p+(l1-l0)*P(0, 1), l0, l1));
-    if(abs(cp-p)<EPS) {
-        const P dir(r*unit(l1-l0));
-        v.push_back(p+dir); v.push_back(p-dir);
-    }
-    else if(abs(cp-p)<r+EPS) {
+    if(abs(cp-p) < r+EPS) {
         const double a = sqrt(sq(r)-norm(p-cp));
-        const P dir(a*unit(cp-p)*P(0, 1));
+        const P dir(a*unit(l1-l0));
         v.push_back(cp+dir); v.push_back(cp-dir);
     }
     return v;
@@ -74,10 +71,11 @@ vector<P> crosspointsCL(const P& p, double r, const P& l0, const P& l1) {
 bool contains(const vector<P>& ps, const P& p) {
     bool in = false;
     rep(i, ps.size()) {
-        P a(ps[i]-p), b(ps[(i+1)%ps.size()]-p);
+        const int j = (i+1)%ps.size();
+        P a(ps[i]-p), b(ps[j]-p);
         if(imag(a) > imag(b)) swap(a, b);
         if(imag(a) <= 0 && 0 < imag(b) && cross(a, b) < 0) in = !in;
-        if(cross(a, b)==0 && dot(a, b) <= 0) return true; // 'on'
+        if(cross(a, b)==0 && dot(a, b) <= 0) return true; // on edge
     }
     return in;
 }
