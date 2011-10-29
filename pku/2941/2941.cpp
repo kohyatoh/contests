@@ -7,8 +7,9 @@ int a[1024][1024];
 
 bool solve(int n) {
     if(n==1) return true;
-    rep(i, n) rep(j, i) {
-        if(a[0][i]+a[1][j]!=a[0][j]+a[1][i]) return false;
+    if(a[0][0]+a[1][1]!=a[0][1]+a[1][0]) return false;
+    for(int k=2; k<n; k++) {
+        if(a[0][k]-a[0][1]!=a[1][k]-a[1][1]) return false;
     }
     for(int k=2; k<n; k++) {
         const int z = a[k][0]-a[1][0];
