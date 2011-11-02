@@ -5,15 +5,21 @@ using namespace std;
 #define INF (1<<28)
 inline void cmin(int &a, int b) { if(a>b) a = b; }
 
-int n, m, xs[512], a[512][512], dp[40][512];
+int n, m, xs[512], sum[512], a[512][512], dp[40][512];
 
 int main() {
     scanf("%d%d", &m, &n);
     rep(i, m) scanf("%d", xs+i);
     sort(xs, xs+m);
-    rep(i, m) for(int j=i+1; j<m; j++) {
-        a[i][j] = 0;
-        for(int k=i+1; k<j; k++) a[i][j] += min(xs[j]-xs[k], xs[k]-xs[i]);
+    rep(i, m) sum[i+1] = sum[i] + xs[i];
+    rep(i, m) {
+        int z = i;
+        for(int j=i+1; j<m; j++) {
+            while(xs[z]-xs[i]<xs[j]-xs[z]) z++;
+            a[i][j] = 0;
+            a[i][j] += (sum[z]-sum[i])-xs[i]*(z-i);
+            a[i][j] += xs[j]*(j-z)-(sum[j]-sum[z]);
+        }
     }
     rep(i, 40) rep(j, 512) dp[i][j] = INF;
     rep(i, m) {
