@@ -1,20 +1,21 @@
 #include <stdio.h>
 #include <string.h>
-#include <queue>
-#include <set>
-using namespace std;
 #define rep(i, n) for(int i=0; i<(int)(n); i++)
-#define mp make_pair
-
-int bitcount(int b) {
-    int c = 0;
-    while(b) b &= b-1, c++;
-    return c;
-}
+inline void cmax(int &a, int b) { if(a<b) a = b; }
 
 const int dx[4] = {1, 0, -1, 0};
 const int dy[4] = {0, 1, 0, -1};
 int n, m, f[32][32];
+
+int dfs(int x, int y, int b) {
+    b |= f[x][y];
+    int ans = 1;
+    rep(d, 4) {
+        const int nx = x+dx[d], ny = y+dy[d];
+        if(f[nx][ny]!=-1 && (b&f[nx][ny])==0) cmax(ans, dfs(nx, ny, b)+1);
+    }
+    return ans;
+}
 
 int main() {
     scanf("%d%d", &n, &m);
@@ -24,29 +25,6 @@ int main() {
         scanf(" %c", &ch);
         f[i+1][j+1] = 1<<(ch-'A');
     }
-    int ans = 0;
-    typedef pair<int, pair<int, int> > T;
-    queue<T> q;
-    set<T> vis;
-    q.push(T(f[1][1], mp(1, 1)));
-    vis.insert(T(f[1][1], mp(1, 1)));
-    while(!q.empty()) {
-        T vv(q.front());
-        q.pop();
-        const int b = vv.first;
-        const int x = vv.second.first, y = vv.second.second;
-        ans = bitcount(b);
-        rep(d, 4) {
-            const int nx = x+dx[d], ny = y+dy[d];
-            if(f[nx][ny]!=-1 && (b&f[nx][ny])==0) {
-                T nxt(b|f[nx][ny], mp(nx, ny));
-                if(vis.count(nxt)==0) {
-                    q.push(nxt);
-                    vis.insert(nxt);
-                }
-            }
-        }
-    }
-    printf("%d\n", ans);
+    printf("%d\n", dfs(1, 1, 0));
     return 0;
 }
