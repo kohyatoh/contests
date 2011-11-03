@@ -32,7 +32,7 @@ public class Main {
     String[] ss;
     int[] is;
 
-    BigInteger ansv;
+    int ansv;
     ArrayList<Integer> ans;
 
     Main(String[] ss, int[] is) {
@@ -43,47 +43,47 @@ public class Main {
     void solve() {
         ans = new ArrayList<Integer>();
         for(int i=0; i<ss.length; i++) {
-            BigInteger bi = calc(i);
-            if(ansv==null || ansv.compareTo(bi)<0) {
-                ansv = bi;
+            int v = calc(i);
+            if(ansv < v) {
+                ansv = v;
                 ans.clear();
             }
-            if(ansv.equals(bi)) ans.add(i);
+            if(ansv == v) ans.add(i);
         }
     }
 
-    BigInteger calc(int df) {
+    int calc(int df) {
         final int n = ss.length;
-        BigInteger[][] min = new BigInteger[n][n];
-        BigInteger[][] max = new BigInteger[n][n];
-        for(int i=0; i<n; i++) {
-            min[i][i] = max[i][i] = BigInteger.valueOf(is[(i+df)%n]);
+        int[][] min = new int[n][n];
+        int[][] max = new int[n][n];
+        for(int i=0; i<n; i++) for(int j=0; j<n; j++) {
+            min[i][j] = 40000;
+            max[i][j] = -40000;
         }
-        ArrayList<BigInteger> ar = new ArrayList<BigInteger>();
-        ar.add(null); ar.add(null); ar.add(null); ar.add(null);
+        for(int i=0; i<n; i++) {
+            min[i][i] = max[i][i] = is[(i+df)%n];
+        }
         for(int w=1; w<n; w++) {
             for(int i=0; i+w<n; i++) {
                 int j = i+w;
                 for(int k=i+1; k<=j; k++) {
-                    BigInteger a, b;
+                    int a, b;
                     if("t".equals(ss[(df+k)%n])) {
-                        a = min[i][k-1].add(min[k][j]);
-                        b = max[i][k-1].add(max[k][j]);
+                        a = min[i][k-1] + min[k][j];
+                        b = max[i][k-1] + max[k][j];
                     }
                     else {
-                        ar.set(0, min[i][k-1].multiply(min[k][j]));
-                        ar.set(1, min[i][k-1].multiply(max[k][j]));
-                        ar.set(2, max[i][k-1].multiply(min[k][j]));
-                        ar.set(3, max[i][k-1].multiply(max[k][j]));
-                        a = Collections.min(ar);
-                        b = Collections.max(ar);
+                        a = Math.min(Math.min(min[i][k-1]*min[k][j],
+                                              min[i][k-1]*max[k][j]),
+                                     Math.min(max[i][k-1]*min[k][j],
+                                              max[i][k-1]*max[k][j]));
+                        b = Math.max(Math.max(min[i][k-1]*min[k][j],
+                                              min[i][k-1]*max[k][j]),
+                                     Math.max(max[i][k-1]*min[k][j],
+                                              max[i][k-1]*max[k][j]));
                     }
-                    if(min[i][j]==null || min[i][j].compareTo(a)>0) {
-                        min[i][j] = a;
-                    }
-                    if(max[i][j]==null || max[i][j].compareTo(b)<0) {
-                        max[i][j] = b;
-                    }
+                    min[i][j] = Math.min(min[i][j], a);
+                    max[i][j] = Math.max(max[i][j], b);
                 }
             }
         }
