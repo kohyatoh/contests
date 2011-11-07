@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>template-icpc</title>
+<meta name="Generator" content="Vim/7.3">
+<meta name="plugin-version" content="vim7.3_v6">
+<meta name="syntax" content="vim">
+<meta name="settings" content="use_css">
+<style type="text/css">
+<!--
+* { margin:2px; }
+pre { font-family: monospace; color: #000000; background-color: #ffffff; }
+body { font-family: monospace; color: #000000; background-color: #ffffff; }
+.Type { color: #2e8b57; font-weight: bold; }
+.PreProc { color: #a020f0; }
+.Statement { color: #a52a2a; font-weight: bold; }
+.Constant { color: #ff00ff; }
+.Special { color: #6a5acd; }
+.Comment { color: #0000ff; }
+-->
+</style>
+</head>
+<body>
+
+<h4>~/.vimrc</h4>
+<pre>
+<span class="Statement">se</span> <span class="PreProc">ts</span>=4 <span class="PreProc">sw</span>=4 <span class="PreProc">et</span> <span class="PreProc">cin</span> <span class="PreProc">hls</span> <span class="PreProc">is</span> <span class="PreProc">ml</span>
+<span class="Statement">syntax</span> <span class="Type">on</span>
+<span class="Statement">map</span> #6 :w^M:!zzrun %^M
+</pre>
+
+<br>
+<h4>~/bin/zz</h4>
+<pre>
+<span class="Comment">#!/bin/bash</span>
+<span class="Statement">rm</span> <span class="Special">-rf</span> a.out
+g++ <span class="Special">-Wall</span> <span class="PreProc">$*</span> <span class="Statement">&gt;</span>errors.err <span class="Constant">2</span><span class="Statement">&gt;&amp;1</span>
+tput setf <span class="Constant">4</span>
+cat errors.err
+tput setf <span class="Constant">7</span>
+</pre>
+
+<br>
+<h4>~/bin/zzrun</h4>
+<pre>
+<span class="Comment">#!/bin/bash</span>
+zz <span class="PreProc">$*</span>
+<span class="Statement">if </span><span class="Statement">[</span> <span class="Statement">!</span> <span class="Statement">-s</span> errors.err <span class="Statement">]</span><span class="Statement">;</span> <span class="Statement">then</span>
+    <span class="Statement">echo</span><span class="Constant"> </span><span class="Statement">&quot;</span><span class="Constant">debug...</span><span class="Statement">&quot;</span>
+    ./a.out
+<span class="Statement">fi</span>
+</pre>
+
+</body>
+</html>
