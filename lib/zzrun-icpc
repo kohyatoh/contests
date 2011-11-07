@@ -1,0 +1,6 @@
+#!/bin/bash
+zz $*
+if [ ! -s errors.err ]; then
+    echo "debug..."
+    ./a.out
+fi
