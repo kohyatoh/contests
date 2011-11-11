@@ -7,7 +7,6 @@ using namespace std;
 #define rep(i, n) for(int i=0; i<(int)(n); i++)
 #define INF (1<<28)
 
-
 template<class W>
 struct Edge {
     int u, v;
@@ -138,7 +137,7 @@ int main() {
         assert(w<=12);
         rep(i, 512) rep(j, 512) g[i][j] = INF;
         rep(i, 512) g[i][i] = 0;
-        rep(i, h) rep(j, w) if(f[i][j]!='X') {
+        rep(i, h) rep(j, w) if(f[i][j]=='.') {
             rep(d, 4) {
                 const int x = i+dx[d], y = j+dy[d];
                 if(x<0 || x>=h || y<0 || y>=w) continue;
