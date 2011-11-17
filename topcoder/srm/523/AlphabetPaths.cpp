@@ -35,11 +35,10 @@ struct L {
     L(int x, int y, int b) : x(x), y(y), b(b) {}
 };
 
-int w, h, f[32][32];
+int w, h, f[32][32], cnt[1<<21];
 
 Int solve(int sx, int sy) {
     if(f[sx][sy]==0) return 0;
-
     queue<pair<int, L> > q;
     q.push(mp(0, L(sx, sy, f[sx][sy])));
     vector<int> z;
@@ -47,7 +46,10 @@ Int solve(int sx, int sy) {
         const pair<int, L> vv(q.front());
         q.pop();
         const int x = vv.second.x, y = vv.second.y, b = vv.second.b;
-        if(vv.first==10) z.push_back(b);
+        if(vv.first==10) {
+            z.push_back(b);
+            cnt[b]++;
+        }
         else rep(d, 4) {
             const int nx = x+dx[d], ny = y+dy[d];
             if(f[nx][ny] && (b&f[nx][ny])==0) {
@@ -55,28 +57,9 @@ Int solve(int sx, int sy) {
             }
         }
     }
-
-    sort(z.begin(), z.end());
-    vector<int> cnt;
-    int m = 0;
-    rep(i, z.size()) {
-        if(m!=0 && z[m-1]==z[i]) cnt[m-1]++;
-        else {
-            z[m++] = z[i];
-            cnt.push_back(1);
-        }
-    }
-
-    const int a = (1<<21)-1 + f[sx][sy];
-    int j = m-1;
     Int ans = 0;
-    rep(i, m) {
-        while(j>=0 && z[i]+z[j]>a) j--;
-        if(j<0) break;
-        if((z[i]&z[j])==f[sx][sy] && (z[i]|z[j])==(1<<21)-1) {
-            ans += (Int)cnt[i]*cnt[j];
-        }
-    }
+    rep(i, z.size()) ans += cnt[(1<<21)-1-z[i]+f[sx][sy]];
+    rep(i, z.size()) cnt[z[i]] = 0;
     return ans;
 }
 
@@ -95,7 +78,6 @@ class AlphabetPaths {
         return ans;
     }
 
-    
 
 };
 
