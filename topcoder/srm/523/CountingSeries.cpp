@@ -28,18 +28,11 @@ typedef long long Int;
 
 class CountingSeries {
     public:
-    long long countThem(long long a, long long b, long long c, long long d, long long upperBound) {
+    long long countThem(long long a, long long b, long long c, long long d, long long ub) {
         Int ans = 0;
-        if(upperBound >= a) {
-            ans += 1 + (upperBound-a)/b;
-        }
-        for(Int x=1; x<=upperBound; x*=d) {
-            if((double)c*x<=upperBound) {
-                const Int z = c*x;
-                if(z<=upperBound) {
-                    if(z<a || (z-a)%b!=0) ans++;
-                }
-            }
+        if(ub>=a) ans += 1 + (ub-a)/b;
+        for(Int x=c; x<=ub; x*=d) {
+            if(x<a || (x-a)%b!=0) ans++;
             if(d==1) break;
         }
         return ans;
