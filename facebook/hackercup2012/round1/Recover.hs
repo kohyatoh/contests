@@ -8,15 +8,15 @@ merge s [] bs rs = (reverse rs ++ bs, s)
 merge ('1':s) (a:as) bs rs = merge s as bs (a:rs)
 merge ('2':s) as (b:bs) rs = merge s as bs (b:rs)
 
-revert :: String -> Int -> [Int] -> ([Int], String)
-revert s 1 xs = (xs, s)
-revert s n xs = merge t' as bs []
+simulate :: String -> Int -> [Int] -> ([Int], String)
+simulate s 1 xs = (xs, s)
+simulate s n xs = merge t' as bs []
   where m = n `div` 2
-        (as, t) = revert s m $ take m xs
-        (bs, t') = revert t (n-m) $ drop m xs
+        (as, t) = simulate s m $ take m xs
+        (bs, t') = simulate t (n-m) $ drop m xs
 
 recover :: Int -> String -> [Int]
-recover n s = map snd . sort . zip (fst $ revert s n [1..n]) $ [1..n]
+recover n s = map snd . sort . zip (fst $ simulate s n [1..n]) $ [1..n]
 
 checksum :: [Int] -> Int
 checksum xs = foldl' step 1 xs
