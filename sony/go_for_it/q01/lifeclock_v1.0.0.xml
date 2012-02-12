@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<Module>
+<!--
+Copyright (c) 2012, Kohsuke Yatoh
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+  <ModulePrefs title="Life Clock" author="Kohsuke Yatoh" height="70"/>
+  <UserPref name="b_year" display_name="Birth year" required="true" default_value="1990"/>
+  <UserPref name="b_month" display_name="Bitrh month" required="true" default_value="7"/>
+  <UserPref name="b_date" display_name="Birth date" required="true" default_value="29"/>
+  <UserPref name="lifespan" display_name="Life span (by years)" required="true" default_value="80"/>
+  <Content type="html"><![CDATA[
+<div id="content_div">
+    <div style="text-align:center; font-size:44px;">
+        <span id="lc_hours">00</span>:<span id="lc_minites">00</span>:<span id="lc_seconds">00</span>
+    </div>
+    <div style="text-align:center; font-size:12px;">
+        <span id="lc_msg"></span>
+    </div>
+</div>
+<script type="text/javascript">
+function setClock() {
+    var prefs = new gadgets.Prefs(),
+        year = parseInt(prefs.getString("b_year")),
+        month = parseInt(prefs.getString("b_month")),
+        date = parseInt(prefs.getString("b_date")),
+        lifespan = parseInt(prefs.getString("lifespan")),
+        dict = time_of_life(year, month, date, lifespan, new Date()),
+        words, index;
+    words = [
+        "Time and tide wait for no one.",
+        "Rome was not build in a day.",
+        "To love life is to love time.",
+        "The early bird catches the worm.",
+        "Time is money."
+    ];
+    document.getElementById("lc_hours").innerHTML = format(dict.hours);
+    document.getElementById("lc_minites").innerHTML = format(dict.minites);
+    document.getElementById("lc_seconds").innerHTML = format(dict.seconds);
+    if (dict.error) {
+        document.getElementById("lc_msg").innerHTML = dict.error;
+    }
+    else {
+        index = Math.floor(Math.random() * words.length);
+        document.getElementById("lc_msg").innerHTML = words[index];
+    }
+}
+function parse(str, default_value) {
+    var val = parseInt(str);
+    if (isNaN(val)) return default_value;
+    return val;
+}
+function format(n) {
+    if (0 <= n && n < 10) return "0" + n;
+    return "" + n;
+}
+function time_of_life(y, m, d, n, day) {
+    var a = new Date(y, m-1, d),
+        b = new Date(y+n, m-1, d),
+        c = new Date(day),
+        frac = (c-a) / (b-a),
+        insec = 24*60*60 * frac,
+        hours = Math.floor(insec/60/60),
+        minites = Math.floor((insec-60*60*hours)/60),
+        seconds = Math.floor(insec-60*60*hours-60*minites),
+        error = "";
+    if (isNaN(y) || isNaN(m) || isNaN(d) || isNaN(n)) {
+        hours = minites = seconds = 0;
+        error = "Please specify your birthday and lifespan correctly.";
+    }
+    else if (frac < 0) {
+        hours = minites = seconds = 0;
+        error = "You're not born.";
+    }
+    return { hours: hours,
+             minites: minites,
+             seconds: seconds,
+             error:error };
+}
+gadgets.util.registerOnLoadHandler(setClock);
+</script>
+]]>
+  </Content> 
+</Module>
