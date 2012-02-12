@@ -15,6 +15,7 @@ import Data.List
 import qualified Data.ByteString.Char8 as S
 
 -- check that the 2nd argument is a prefix of src[x, x+y, x+y*2...].
+check :: S.ByteString -> String -> Int -> Int -> Bool
 check src [] _ _ = True
 check src (c:cs) x y =
     x < S.length src && c == src `S.index` x && check src cs (x+y) y
