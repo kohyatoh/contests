@@ -38,5 +38,7 @@ function time_of_life(y, m, d, n, day) {
              error:error };
 }
 
+console.log("Birth day is 1990/7/29, n = 80");
 console.log(time_of_life(1990, 7, 29, 80, new Date()));
+console.log("Birth day is 1990/7/29, n = 200");
 console.log(time_of_life(1990, 7, 29, 200, new Date()));
