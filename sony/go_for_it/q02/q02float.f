@@ -25,8 +25,14 @@ c      - gsl_math.h
         double precision a
         double precision mygamma
         read *, a
-        write (*,100) mygamma(a+1)
-100     format (F14.6)
+        if ((0.0d0 .LE. a .and. a .LE. 10.0d0)
+     +          .or. (-1.9d0 .LE. a .and. a .LE. -1.1d0)) then
+            write (*,100) mygamma(a+1)
+100         format (F15.7)
+        else
+            write (*,*) "Input must be between 0 and 10"
+            write (*,*) "   or between -1.9 and -1.1."
+        endif
       stop
       end
 
