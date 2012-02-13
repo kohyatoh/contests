@@ -1,0 +1,36 @@
+<html>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<body>
+Sony GO FOR IT Q3 参考情報 (矢藤 康祐)
+<h4>1. プログラムコード</h4>
+<p>
+https://github.com/kohyatoh/kohyatoh_contests/blob/master/sony/go_for_it/q03/q03slow.hs (i)<br>
+https://github.com/kohyatoh/kohyatoh_contests/blob/master/sony/go_for_it/q03/q03fast.hs (ii)
+https://github.com/kohyatoh/kohyatoh_contests/blob/master/sony/go_for_it/q03/gensample.hs (rand_str生成)
+</p>
+<h4>2. 出力</h4>
+<h5>i) 入力=("sony", "sxoxnxy")</h5>
+<pre>
+2, 1 
+</pre>
+<h5>ii) 入力=("sony", 問題文中のrand_str)</h5>
+<p>
+https://github.com/kohyatoh/kohyatoh_contests/blob/master/sony/go_for_it/q03/answer.txt にあります。
+</p>
+<h4>3. アルゴリズムの簡単な説明</h4>
+http://d.hatena.ne.jp/kohyatoh/20120213/1329090590 にあります。
+<h4>4. 動作方法の説明</h4>
+<h5>Ubuntu 11.04での動作例</h5>
+<pre>
+$ sudo apt-get install ghc
+$ ghc --make -O3 q03slow.hs
+$ ghc --make -O3 q03fast.hs
+$ ghc --make -O3 gensample.hs
+$ echo "sxoxnxy" | ./q03slow sony
+2, 1
+$ ./gensample | ./q03fast sony &gt; answer.txt
+</pre>
+<h4>5. ライセンス</h4>
+BSDライセンス
+</body>
+</html>
