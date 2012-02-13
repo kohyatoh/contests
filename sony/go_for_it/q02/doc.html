@@ -1,0 +1,40 @@
+<html>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<body>
+Sony GO FOR IT Q2 参考情報 (矢藤 康祐)
+<h4>1. プログラムコード</h4>
+<p>
+https://github.com/kohyatoh/kohyatoh_contests/blob/master/sony/go_for_it/q02/q02int.f (i)<br>
+https://github.com/kohyatoh/kohyatoh_contests/blob/master/sony/go_for_it/q02/q02float.f (ii, iii)
+</p>
+<h4>2. 出力</h4>
+<h5>i) 入力=5</h5>
+<pre>
+ 120
+</pre>
+<h5>ii) 入力=2.5</h5>
+<pre>
+      3.3233510
+</pre>
+<h5>ii) 入力=-1.9</h5>
+<pre>
+      1.8273551
+</pre>
+<h4>3. アルゴリズムの簡単な説明</h4>
+i)は定義通りの計算、ii), iii)はLanczos approximationを用いた近似 (GNU Scientific Libraryの移植)。
+<h4>4. 動作方法の説明</h4>
+<h5>Ubuntu 11.04での動作例</h5>
+<pre>
+$ sudo apt-get install fort77
+$ fort77 q02int.f
+$ ./a.out
+&lt;入力&gt;
+$ fort77 q02float.f
+$ ./a.out
+&lt;入力&gt;
+</pre>
+<h4>5. ライセンス</h4>
+q02int.f: BSDライセンス<br>
+q02float.f: GPL v3ライセンス<br>
+</body>
+</html>
