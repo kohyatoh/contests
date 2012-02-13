@@ -1,0 +1,73 @@
+<html>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<body>
+Sony GO FOR IT Q4 参考情報 (矢藤 康祐)
+<h4>1. プログラムコード</h4>
+<p>
+https://github.com/kohyatoh/kohyatoh_contests/blob/master/sony/go_for_it/q04/q04.pl
+</p>
+<h4>2. 出力</h4>
+Prologの対話式インタプリタ上での実行結果となります。
+<h5>i)</h5>
+<pre>
+?- feature_a(X).
+X = 12 .
+
+?- feature_b(X).
+X = 13 .
+
+?- feature_c(X).
+X = 12 .
+
+?- a_alike_b.
+false.
+
+?- a_alike_c.
+true .
+</pre>
+<h5>ii)</h5>
+<pre>
+?- feature_d(X).
+X = 13 .
+
+?- feature_e(X).
+X = 14 .
+
+?- feature_f(X).
+X = 11 .
+
+?- b_alike_d.
+true .
+
+?- b_alike_e.
+false.
+
+?- b_alike_f.
+false.
+</pre>
+<h5>iii)</h5>
+<pre>
+?- feature_g(X).
+X = 25 .
+
+?- alike_g(S), notes(N, S, []), feature_value(N, X).
+S = [45, 50, 58, 49, 54, 58, 44, 45, 50|...],
+N = [[116, 0.0625], [117, 0.0625], [118, 0.0625], [119, 0.0625], [120, 0.0625], [121, 0.0625], [122, 0.0625], [123|...], [...|...]|...],
+X = 25 .
+
+?- alike_g(S), name(X, S).
+S = [45, 50, 58, 49, 54, 58, 44, 45, 50|...],
+X = '-2:16:,-2:16:s,-1:16:,-1:16:s,0:16:,1:16:,1:16:s,2:16:,2:16:s,3:16:,4:16:,4:16:s,5:16:,5:16:s,6:16:,6:16:s,7:16:,8:16:,8:16:s,9:16:,9:16:s,10:16:,11:16:,11:16:s,12:16:,12:16:s,12:16:s,12:16:,11:16:s,11:16:,10:16:,9:16:s,9:16:,8:16:s,8:16:,7:16:,6:16:s,6:16:,5:16:s,5:16:,4:16:s,4:16:,3:16:,2:16:s,2:16:,1:16:s,1:16:,0:16:,-1:16:s,-1:16:,-2:16:s,-2:16:' .
+</pre>
+<h4>3. アルゴリズムの簡単な説明</h4>
+http://d.hatena.ne.jp/kohyatoh/20120213/1329092480 にあります。
+<h4>4. 動作方法の説明</h4>
+<h5>Ubuntu 11.04での動作例</h5>
+<pre>
+$ sudo apt-get install swi-prolog
+$ prolog -s q04.pl
+</pre>
+<h4>5. ライセンス</h4>
+BSDライセンス
+</body>
+</html>
