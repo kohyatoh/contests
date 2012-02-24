@@ -1,0 +1,4 @@
+A: AC
+B: AC
+C: AC (but spends 2980ms of 3000ms)
+D: FAILED ON PRETEST
