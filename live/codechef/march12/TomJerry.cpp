@@ -76,6 +76,39 @@ vector<loc> solve_far() {
     return ans;
 }
 
+bool can_trap(int L) {
+    int c = 0;
+    rep (i, 2) rep (d, 4) {
+        const int x = ox[L+i]+dx[d], y = oy[L+i]+dy[d];
+        if (f[x][y] == '.' && path[x][y] == -1) c++;
+    }
+    return c <= L+1;
+}
+
+vector<loc> make_trap(int L) {
+    static char g[64][64];
+    memcpy(g, f, sizeof(g));
+    vector<loc> ans;
+    rep (i, 2) rep (d, 4) {
+        const int x = ox[L+i]+dx[d], y = oy[L+i]+dy[d];
+        if (g[x][y] == '.' && path[x][y] == -1) {
+            g[x][y] = '#';
+            ans.push_back(mp(x, y));
+        }
+    }
+    rep (i, M) rep (j, N) if (g[i][j] == '.' && path[i][j] == -1) {
+        if ((int)ans.size() < L+1) {
+            g[i][j] = '#';
+            ans.push_back(mp(i, j));
+        }
+    }
+    ans.push_back(mp(ox[L+2], oy[L+2]));
+    if ((int)ans.size() == L+2) {
+        ans.push_back(mp(ox[L-1], oy[L-1]));
+    }
+    return ans;
+}
+
 vector<loc> solve() {
     calc(tx, ty);
     /*
@@ -89,27 +122,25 @@ vector<loc> solve() {
     */
     vector<loc> ans;
     while (ans.size() <= 200) {
-        if (f[tx][ty] == '0') break;
+        if (f[tx][ty] == '0') return vector<loc>();
         const int dist = calc(tx, ty);
-        if (dist == INF || dist <= 1) break;
-        if (dist >= 6) {
-            vector<loc> v = solve_far();
+        if (dist == INF || dist <= 1) return ans;
+        for (int L = 1; L <= min(dist-3, 3); L++) if (can_trap(L)) {
+            vector<loc> v = make_trap(L);
             rep (i, v.size()) ans.push_back(v[i]);
-            break;
+            return ans;
         }
+        const int x = ox[dist-1], y = oy[dist-1];
+        ans.push_back(mp(x, y));
+        f[x][y] = '#';
+        int d = calc(tx, ty);
+        if (d == INF) break;
         else {
-            const int x = ox[dist-1], y = oy[dist-1];
-            ans.push_back(mp(x, y));
-            f[x][y] = '#';
-            int d = calc(tx, ty);
-            if (d == INF) break;
-            else {
-                tx = ox[1];
-                ty = oy[1];
-            }
+            tx = ox[1];
+            ty = oy[1];
         }
     }
-    return ans;
+    return vector<loc>();
 }
 
 int main() {
