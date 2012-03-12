@@ -1,0 +1,6 @@
+#!/bin/bash
+zz $*
+if [ -f a.out ]; then
+    echo "debug..."
+    ./a.out
+fi

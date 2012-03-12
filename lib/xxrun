@@ -1,0 +1,6 @@
+#!/bin/bash
+xx $*
+if [ -f a.out ]; then
+    echo "release..."
+    ./a.out
+fi

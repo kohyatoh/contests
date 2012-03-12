@@ -1,0 +1,6 @@
+#!/bin/bash
+rm -rf a.out
+g++ -Wall -O2 $* >errors.err 2>&1
+tput setf 4
+cat errors.err
+tput setf 7
