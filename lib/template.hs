@@ -20,11 +20,11 @@ solve n = n
 
 input :: IO Int
 input = do
-    n <- atoi . head . B.words <$> B.getLine
+    [n] <- map atoi . B.words <$> B.getLine
     return n
 
 main = do
-    n <- atoi . head . B.words <$> B.getLine
+    [n] <- map atoi . B.words <$> B.getLine
     forM_ [1..n] $ \i -> do
         n <- input
         let ans = solve n
